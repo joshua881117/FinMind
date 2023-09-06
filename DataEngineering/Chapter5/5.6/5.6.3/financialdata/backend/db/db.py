@@ -3,7 +3,7 @@ import typing
 import pandas as pd
 import pymysql
 from loguru import logger
-from sqlalchemy import engine
+from sqlalchemy import engine, text
 
 
 def update2mysql_by_pandas(
@@ -20,6 +20,7 @@ def update2mysql_by_pandas(
                 index=False,
                 chunksize=1000,
             )
+            mysql_conn.commit()
         except Exception as e:
             logger.info(e)
             return False
@@ -104,29 +105,27 @@ def commit(
 ):
     logger.info("commit")
     try:
-        trans = mysql_conn.begin()
         if isinstance(sql, list):
             for s in sql:
                 try:
+                    sql_query = text(s)
                     mysql_conn.execution_options(
                         autocommit=False
-                    ).execute(
-                        s
-                    )
+                    ).execute(sql_query)
+                    mysql_conn.commit()
                 except Exception as e:
                     logger.info(e)
                     logger.info(s)
                     break
 
         elif isinstance(sql, str):
+            sql_query = text(sql)
             mysql_conn.execution_options(
                 autocommit=False
-            ).execute(
-                sql
-            )
-        trans.commit()
+            ).execute(sql_query)
+            mysql_conn.commit()
     except Exception as e:
-        trans.rollback()
+        mysql_conn.rollback()
         logger.info(e)
 
 
@@ -142,6 +141,7 @@ def upload_data(
             table=table,
             mysql_conn=mysql_conn,
         ):
+            logger.info("Success upload {} data by pandas".format(len(df)))
             pass
         else:
             # 如果有重複的資料
@@ -151,3 +151,4 @@ def upload_data(
                 table=table,
                 mysql_conn=mysql_conn,
             )
+            logger.info("Success upload {} data by SQL".format(len(df)))

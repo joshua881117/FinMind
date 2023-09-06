@@ -1,13 +1,15 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages # 將程式碼打包為套件
 from os import path
 from io import open
 
-here = path.abspath(path.dirname(__file__))
+#抓取檔案所在路徑
+here = path.abspath(path.dirname(__file__)) # dirname 是抓取檔案前面的路徑、abspath 是將目前路徑和 dirname 抓的路徑合併
 
-with open(path.join(here, "README.md"), encoding="utf-8") as f:
-    long_description = f.read()
+with open(path.join(here, "README.md"), encoding="utf-8") as f: # 透過 with 讀檔案會自動關閉檔案
+    long_description = f.read() # 讀取檔案內容
 
-setup(
+# 套件資訊
+setup( 
     name="financialdata",  # Required
     version="1.0.1",  # Required
     description="financial mining",  # Optional

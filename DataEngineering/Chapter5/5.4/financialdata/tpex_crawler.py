@@ -189,7 +189,7 @@ def main(
             try:
                 df.to_sql(
                     name="TaiwanStockPrice",
-                    con=db_router.mysql_financialdata_conn,
+                    con=db_router._mysql_financialdata_conn,
                     if_exists="append",
                     index=False,
                     chunksize=1000,

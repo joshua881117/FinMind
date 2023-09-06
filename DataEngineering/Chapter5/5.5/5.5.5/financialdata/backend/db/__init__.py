@@ -1,8 +1,11 @@
 from financialdata.backend.db.router import Router
 from financialdata.backend.db.db import *
 
-router = Router()
+r = Router()
 
 
 def get_db_router():
-    return router
+    return r
+
+def close_conn():
+    r.close_connection()

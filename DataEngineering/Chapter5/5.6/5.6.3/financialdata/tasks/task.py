@@ -27,8 +27,7 @@ def crawler(
         taiwan_stock_price="TaiwanStockPrice",
         taiwan_futures_daily="TaiwanFuturesDaily",
     )
-    db.upload_data(
-        df,
-        db_dataset,
-        db.router.mysql_financialdata_conn,
-    )
+    table = db_dataset[dataset]
+    r = db.get_db_router()
+    with r.mysql_financialdata_conn as conn:
+        db.db.upload_data(df, table, conn)

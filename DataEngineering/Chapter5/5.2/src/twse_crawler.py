@@ -4,51 +4,32 @@ import time
 import typing
 
 import pandas as pd
+import numpy as np
 import requests
 from loguru import logger
-from pydantic import BaseModel
+from pydantic import BaseModel #指定變數的型態後，可以驗證變數的值是否符合指定的型態
 
 
 def clear_data(
-    df: pd.DataFrame,
-) -> pd.DataFrame:
+    df: pd.DataFrame, # 輸入的參數為 df，型態為 dataframe
+) -> pd.DataFrame: # return 的型態要為 dataframe
     """資料清理, 將文字轉成數字"""
     df["Dir"] = (
-        df["Dir"]
-        .str.split(">")
-        .str[1]
-        .str.split("<")
-        .str[0]
+        df["Dir"].str.split(">").str[1].str.split("<").str[0]
     )
     df["Change"] = (
         df["Dir"] + df["Change"]
     )
     df["Change"] = (
-        df["Change"]
-        .str.replace(" ", "")
-        .str.replace("X", "")
-        .astype(float)
+        df["Change"].str.replace(" ", "").str.replace("X", "").astype(float)
     )
     df = df.fillna("")
     df = df.drop(["Dir"], axis=1)
-    for col in [
-        "TradeVolume",
-        "Transaction",
-        "TradeValue",
-        "Open",
-        "Max",
-        "Min",
-        "Close",
-        "Change",
-    ]:
+    for col in ["TradeVolume", "Transaction", "TradeValue",
+        "Open", "Max", "Min", "Close", "Change",]:
         df[col] = (
-            df[col]
-            .astype(str)
-            .str.replace(",", "")
-            .str.replace("X", "")
-            .str.replace("+", "")
-            .str.replace("----", "0")
-            .str.replace("---", "0")
+            df[col].astype(str).str.replace(",", "").str.replace("X", "")
+            .str.replace("+", "").str.replace("----", "0").str.replace("---", "0")
             .str.replace("--", "0")
         )
     return df
@@ -135,9 +116,7 @@ def crawler_twse(
             df = pd.DataFrame(
                 res.json()["data9"]
             )
-            colname = res.json()[
-                "fields9"
-            ]
+            colname = res.json()["fields9"]
         elif "data8" in res.json():
             df = pd.DataFrame(
                 res.json()["data8"]
@@ -159,11 +138,12 @@ def crawler_twse(
     df = colname_zh2en(
         df.copy(), colname
     )
+    
     df["date"] = date
     return df
 
 
-class TaiwanStockPrice(BaseModel):
+class TaiwanStockPrice(BaseModel): #建立各變數的型態
     StockID: str
     TradeVolume: int
     Transaction: int

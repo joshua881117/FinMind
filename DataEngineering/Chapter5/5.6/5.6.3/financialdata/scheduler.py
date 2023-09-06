@@ -31,12 +31,7 @@ def main():
     )
     # 與 crontab 類似，設定何時執行，有小時、分鐘、秒參數，* 星號代表任意時間點
     scheduler.add_job(
-        id="sent_crawler_task",
-        func=sent_crawler_task,
-        trigger="cron",
-        hour="15",
-        minute="0",
-        day_of_week="mon-fri",
+       
     )
     logger.info("sent_crawler_task")
     scheduler.start()

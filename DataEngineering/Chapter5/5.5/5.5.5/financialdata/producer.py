@@ -7,6 +7,7 @@ from financialdata.backend import db
 from financialdata.tasks.task import crawler
 
 
+
 def Update(dataset: str, start_date: str, end_date: str):
     # 拿取每個爬蟲任務的參數列表，
     # 包含爬蟲資料的日期 date，例如 2021-04-10 的台股股價，
@@ -19,10 +20,13 @@ def Update(dataset: str, start_date: str, end_date: str):
     for parameter in parameter_list:
         logger.info(f"{dataset}, {parameter}")
         task = crawler.s(dataset, parameter)
+        # 異步執行：在執行多個爬蟲 request 時不需要等到前一個回傳資料後才執行下一個 request
+        # apply_async() 方法可以方便地将任务提交到 Celery 任务队列中，以实现后台异步执行，
+        # 这对于处理需要长时间运行的任务非常有用，因为它不会阻塞主程序的执行。
         # queue 參數，可以指定要發送到特定 queue 列隊中
-        task.apply_async(queue=parameter.get("data_source", ""))
+        task.apply_async(queue=parameter.get("data_source", "")) 
 
-    db.router.close_connection()
+    # db.close_conn()
 
 
 if __name__ == "__main__":

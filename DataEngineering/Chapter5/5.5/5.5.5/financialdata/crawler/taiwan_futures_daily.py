@@ -7,6 +7,40 @@ import pandas as pd
 import requests
 from financialdata.schema.dataset import check_schema
 
+def is_weekend(day: int) -> bool:
+    return day in [5, 6]
+
+def gen_task_paramter_list(
+    start_date: str, end_date: str
+) -> typing.Dict:
+    start_date = (
+        datetime.datetime.strptime(
+            start_date, "%Y-%m-%d"
+        ).date()
+    )
+    end_date = (
+        datetime.datetime.strptime(
+            end_date, "%Y-%m-%d"
+        ).date()
+    )
+    days = (
+        end_date - start_date
+    ).days + 1
+    date_list = [
+        start_date
+        + datetime.timedelta(days=day)
+        for day in range(days)
+    ]
+    # 排除掉周末非交易日
+    date_list = [
+        dict(
+            date=str(d),
+            data_source='future',
+        )
+        for d in date_list
+        if not is_weekend(d.weekday())
+    ]
+    return date_list
 
 def futures_header():
     """網頁瀏覽時, 所帶的 request header 參數, 模仿瀏覽器發送 request"""

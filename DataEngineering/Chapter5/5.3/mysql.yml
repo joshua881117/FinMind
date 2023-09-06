@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-
+  # 啟動兩個 container(mysql, phpmyadmin)
   mysql:
       image: mysql:8.0
       # 設定 mysql 使用原生認證的密碼 hash

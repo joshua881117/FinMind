@@ -224,7 +224,7 @@ def main(
     date_list = gen_date_list(
         start_date, end_date
     )
-    db_router = Router()
+    db_router = Router() #建立連線
     for date in tqdm(date_list):
         logger.info(date)
         df = crawler_futures(date)
@@ -241,11 +241,11 @@ def main(
             try:
                 df.to_sql(
                     name="TaiwanFutures",
-                    con=db_router.mysql_financialdata_conn,
+                    con=db_router._mysql_financialdata_conn,
                     if_exists="append",
                     index=False,
-                    chunksize=1000,
-                )
+                    chunksize=1000, # 一次寫入 1000 筆資料
+                ) # 將 df 寫入 mysql 資料庫中
             except Exception as e:
                 logger.info(e)
 
