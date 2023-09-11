@@ -5,13 +5,13 @@ services:
     ports:
         - 8888:8888
     hostname: "api"
-    restart: always
+    restart: always # 壞掉會重啟
     environment:
       - TZ=Asia/Taipei
     networks:
-        - my_network
+        - test
 
 networks:
-  my_network:
+  test:
     # 加入已經存在的網路
     external: true
