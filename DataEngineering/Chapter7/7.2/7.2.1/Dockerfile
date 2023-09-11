@@ -1,6 +1,6 @@
 # 由於 continuumio/miniconda3:4.3.27 中的 Debian
 # 版本太舊，因此改用 ubuntu 系統
-FROM ubuntu:18.04
+FROM ubuntu
 
 # 系統升級、安裝 python
 RUN apt-get update && apt-get install python3.11 -y && apt-get install python3-pip -y

@@ -8,7 +8,7 @@ services:
     environment:
       - TZ=Asia/Taipei
     networks:
-        - my_network
+        - test
 
   crawler_tpex:
     image: crawler:7.2.1
@@ -18,7 +18,7 @@ services:
     environment:
       - TZ=Asia/Taipei
     networks:
-        - my_network
+        - test
 
   crawler_taifex:
     image: crawler:7.2.1
@@ -28,9 +28,9 @@ services:
     environment:
       - TZ=Asia/Taipei
     networks:
-        - my_network
+        - test
 
 networks:
-  my_network:
+  test:
     # 加入已經存在的網路
     external: true

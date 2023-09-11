@@ -8,9 +8,9 @@ services:
     environment:
       - TZ=Asia/Taipei
     networks:
-        - my_network
+        - test
 
 networks:
-  my_network:
+  test:
     # 加入已經存在的網路
     external: true

@@ -11,7 +11,7 @@ services:
       RABBITMQ_DEFAULT_PASS: "worker"
       RABBITMQ_DEFAULT_VHOST: "/"
     networks:
-      - my_network
+      - test
 
   flower:
     image: mher/flower:0.9.5
@@ -21,9 +21,9 @@ services:
     depends_on:
       - rabbitmq
     networks:
-      - my_network
+      - test
 
 networks:
-  my_network:
+  test:
     # 加入已經存在的網路
     external: true
